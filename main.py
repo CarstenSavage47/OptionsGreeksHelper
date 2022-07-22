@@ -1,0 +1,110 @@
+
+import scipy
+import requests
+import bs4
+import numpy as np
+
+from wallstreet import Stock, Call, Put
+
+Question = input("Are You Trading a Call or a Put?: ")
+Ticker = input("Enter Ticker: ")
+Day = int(input("Enter Day: "))
+Month = int(input("Enter Month: "))
+Year = int(input("Enter Year: "))
+Strike = float(input("Enter Strike: "))
+
+Call_Data = Call(Ticker, d=Day, m=Month, y=Year, strike=Strike)
+Put_Data = Put(Ticker, d=Day, m=Month, y=Year, strike=Strike)
+Shares = abs(round(Put_Data.delta()*100))
+Profitability = abs(round(Put_Data.delta()*100,2))
+
+if Question == 'Call':
+    #Ticker.price
+    print('Call Contract Price:',Call_Data.price)
+    print()
+    print()
+    #Ticker.delta()
+    print('Call Contract Delta:',round(Call_Data.delta(),3))
+    print('This',Ticker,'Call has a',round(Call_Data.delta()*100,2),'%','chance of being profitable.')
+    print('Given a $1 change in underlying',Ticker,'this call will likely gain or lose the same amount of money as',
+          round(Call_Data.delta()*100,2),'shares of',Ticker,'stock.')
+    print('Note: ITM approaches 1, OTM approaches 0, ATM at .5.')
+    print()
+    print()
+    #Ticker.gamma()
+    print('Call Contract Gamma:',round(Call_Data.gamma(),3))
+    print('Note: Rate of change of delta.')
+    print('Note: Gamma decreases as a call gets further ITM.')
+    print()
+    print()
+    #Ticker.theta()
+    print('Call Contract Theta:',round(Call_Data.theta(),3))
+    print('This',Ticker,'Call will lose $',round(Call_Data.theta()*100,3),'every day off of the premium.')
+    print('Note: The effect of theta really ramps up 30-45 days from expiration.')
+    print()
+    print()
+    #Ticker.vega()
+    print('Call Contract Vega:',round(Call_Data.vega(),3))
+    print('With a 1% change in volatility, the value of this call will change by',round(Call_Data.vega(),3))
+    print()
+    print()
+    #Ticker.rho()
+    print('Call Contract Rho:',round(Call_Data.rho(),3))
+    print('With a 1 percentage point increase in interest rates, the value of this call will change by',round(Call_Data.rho(),3))
+    print('Note: LEAPS are much more sensitive to interest rate changes than short term options.')
+    print()
+    print()
+    #Ticker.implied_volatility()
+    print('Call Contract Implied Volatility:',round(Call_Data.implied_volatility(),3))
+    print('Note: Implied volatility is the estimated volatility of a stock that is implied by the prices of the options on that stock.')
+    print('Note: Higher-than-normal implied volatility is better for options sellers.')
+    print()
+    print()
+    #Ticker.underlying.price
+    print('Call Contract Underlying Price:',Call_Data.underlying.price)
+
+else:
+    #Ticker.price
+    print('Put Contract Price:',Put_Data.price)
+    print()
+    print()
+    #Ticker.delta()
+    print('Put Contract Delta:',round(Put_Data.delta(),3))
+    print('This',Ticker,'put has a',Profitability,'%','chance of being profitable.')
+    print('Given a $1 change in underlying',Ticker,'this put will likely gain or lose the same amount of money as',
+          Shares,'shares of',Ticker,'stock.')
+    print('Note: ITM approaches 1, OTM approaches 0, ATM at .5.')
+    print()
+    print()
+    #Ticker.gamma()
+    print('Put Contract Gamma:',round(Put_Data.gamma(),3))
+    print('Note: Rate of change of delta.')
+    print()
+    print()
+    #Ticker.theta()
+    print('Put Contract Theta:',round(Put_Data.theta(),3))
+    print('This',Ticker,'put will lose $',round(Put_Data.theta()*100,3),'every day off of the premium.')
+    print('Note: The effect of theta really ramps up 30-45 days from expiration.')
+    print()
+    print()
+    #Ticker.vega()
+    print('Put Contract Vega:',round(Put_Data.vega(),3))
+    print('With a 1% change in volatility, the value of this put will change by',round(Put_Data.vega(),3))
+    print()
+    print()
+    #Ticker.rho()
+    print('Put Contract Rho:',round(Put_Data.rho(),3))
+    print('With a 1 percentage point increase in interest rates, the value of this put will change by',round(Put_Data.rho(),3))
+    print('Note: LEAPS are much more sensitive to interest rate changes than short term options.')
+    print()
+    print()
+    #Ticker.implied_volatility()
+    print('Put Contract Implied Volatility:',round(Put_Data.implied_volatility(),3))
+    print('Note: Implied volatility is the estimated volatility of a stock that is implied by the prices of the options on that stock.')
+    print('Note: Higher-than-normal implied volatility is better for options sellers.')
+    print()
+    print()
+    #Ticker.underlying.price
+    print('Put Contract Underlying Price:',Put_Data.underlying.price)
+
+
